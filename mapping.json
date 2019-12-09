@@ -1,0 +1,29 @@
+{
+  "movie": {
+    "properties": {
+      "yearOfProduction": {
+        "type": "integer"
+      },
+      "title": {
+        "type": "string",
+        "index": "not_analyzed"
+      },
+      "keywords": {
+        "type": "text",
+        "index": "not_analyzed"
+      },
+      "director": {
+        "type": "keyword",
+        "index": "not_analyzed"
+      },
+      "genre": {
+        "type": "text",
+        "index": "not_analyzed"
+      },
+      "country": {
+        "type": "keyword",
+        "index": "not_analyzed"
+      }
+    }
+  } 
+}

@@ -9,22 +9,52 @@ import org.jsoup.select.Elements;
 
 public class Scraper {
 	
-	public static void getMovieInfo(String url) throws IOException{
-		Document doc = Jsoup.connect(url).get();
-		System.out.println("Items from:\t" + doc.title());
-
-		Elements credit = doc.select("div.credit_summary_item");
-		for (Element elem:credit) {
-			System.out.println("\t:" + elem.text());
-		}
+	public void getMovieInfo(String url) throws IOException{
+		
+		Movie movie = new Movie();
+		
+ 		Document doc = Jsoup.connect(url).get();
+ 		
+ 		//browses link with all keywords of the movie
+		Document keywordDoc = Jsoup.connect(url+"/keywords?ref_=tt_stry_kw").get();
+		
+		movie.title = doc.title();
 		
 		System.out.println("Title:\t" + doc.title());
-		
-		System.out.println("a href from:\t" + doc.title());
-		Elements lhref = doc.select("a[href]");
-		for (Element elem:lhref) {
-			System.out.println("\t:" + elem.text());
-		}
 
+		Elements director  = doc.select("div.credit_summary_item:contains(Director) > a");
+		for (Element elem:director) {
+			movie.director = elem.html();
+			System.out.println("Director: " + movie.director);
+		}
+		
+		
+		Elements year  = doc.select("span#titleYear > a");
+		for (Element elem:year) {
+			movie.yearOfProduction = Integer.valueOf(elem.html());
+			System.out.println("Year: " + movie.yearOfProduction);
+		}
+		
+		
+		Elements keywords = keywordDoc.select("table.dataTable > tbody > tr > td > div.sodatext > a");
+		for (Element elem:keywords) {
+			movie.keywords += elem.html()+"|";
+		}
+		System.out.println("key:  " + movie.keywords);
+
+		
+		Elements genres  = doc.select("div.see-more:contains(Genres) > a");
+		for (Element elem:genres) {
+			movie.genre += elem.html()+"|";
+		}
+		System.out.println("Genre: " + movie.genre);
+
+		
+		
+		Elements country  = doc.select("div.txt-block:contains(Country) > a");
+		for (Element elem:country) {
+			movie.country = elem.html();
+			System.out.println("Country: " + movie.country);
+		}
 	}	
 }
