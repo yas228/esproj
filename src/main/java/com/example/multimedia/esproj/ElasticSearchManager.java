@@ -3,6 +3,13 @@ package com.example.multimedia.esproj;
 import java.io.IOException;
 
 import org.apache.http.HttpHost;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -89,6 +96,36 @@ public class ElasticSearchManager {
 		}
 
 	}
+
+	
+	public void bulkUpload(Movie []  movies) {
+		BulkRequest request = new BulkRequest(); 
+		
+		
+        for (int i = 1; i < movies.length; i++) {
+        	request.add(movies[i].toIndexRequest());
+			System.out.println(movies.length);
+
+        }
+        
+		try {
+			BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+	}
+	
+	
+		public void index(IndexRequest req) {
+			client.indexAsync(req, RequestOptions.DEFAULT, null);
+		}
+
+		public void update(UpdateRequest req) {
+			client.updateAsync(req, RequestOptions.DEFAULT, null);
+		}
 	
 	
 
