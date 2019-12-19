@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.elasticsearch.action.index.IndexRequest;
-import org.elasticsearch.action.update.UpdateRequest;
 
 public class Movie {
 	String Id = "";
@@ -14,6 +13,8 @@ public class Movie {
 	String director = "" ;
 	String genre = "";
 	String country ="";
+	String summary ="";
+
 	
 	public IndexRequest toIndexRequest() {
 		Map<String, Object> jsonMap = new HashMap<>();
@@ -23,21 +24,12 @@ public class Movie {
 		jsonMap.put("director", director);
 		jsonMap.put("genre", genre);
 		jsonMap.put("country", country);
+		jsonMap.put("summary", summary);
+
 		IndexRequest indexRequest = new IndexRequest("movies")
 		    .id(Id).source(jsonMap);
 		
 		return indexRequest;
 	}
-	
-	public UpdateRequest toUpdateRequest() {
-		Map<String, Object> jsonMap = new HashMap<>();
-		jsonMap.put("keywords", keywords);
-		jsonMap.put("genre", genre);
-		UpdateRequest updateRequest = new UpdateRequest("movies", Id)
-		    .doc(jsonMap);
 		
-		return updateRequest;
-	}
-	
-	
 }

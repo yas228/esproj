@@ -48,14 +48,19 @@ public class Scraper {
 		for (Element elem:genres) {
 			movie.genre += elem.html()+"|";
 		}
-
-		
 		
 		Elements country  = doc.select("div.txt-block:contains(Country) > a");
 		for (Element elem:country) {
 			movie.country = elem.html();
 		}
 		
+		
+		Elements summary  = doc.select("div#titleStoryLine > div:first-of-type > p > span");
+		for (Element elem:summary) {
+			movie.summary = elem.html();
+    		System.out.println(movie.summary);
+
+		}
 		
 		return movie;
 	}	
@@ -64,9 +69,6 @@ public class Scraper {
 	    {
 	    	try {
 	    		
-	    		
-	    		
-	    		Scraper scraper = new Scraper();
 	    		ElasticSearchManager esm = new ElasticSearchManager();
 	    		Movie movie = new Movie();
 	    		
@@ -76,7 +78,7 @@ public class Scraper {
 	            int rows = sheet.getLastRowNum();
 	            	            	            
 	            //looping through all movie in the excel sheet
-	            for (int i = 2481; i < rows; i++) {
+	            for (int i = 1; i < rows; i++) {
 	                XSSFRow row = sheet.getRow(i);
 
 	                XSSFCell imdbIdCell = row.getCell(0);
@@ -88,11 +90,11 @@ public class Scraper {
 	                movie = getMovieInfo(url, movie);
 	                
 	                esm.index(movie.toIndexRequest()); 
-	                //esm.update(movie.toUpdateRequest()); 
 
 	        		System.out.println(i);
 
 	            }
+	            
 	            wb.close();
 	            	
 				

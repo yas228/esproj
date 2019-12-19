@@ -9,7 +9,6 @@ public class App
 			sc.readExcel();
 
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
